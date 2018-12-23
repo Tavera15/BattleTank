@@ -8,3 +8,4 @@ Creating a battle tank game from Unreal Engine course from Udemy.
 * Added tank and setup camera view
 * Added UI and main menu
 * Added code to both player and AI controllers
+* Started code on player and AI tank aiming components

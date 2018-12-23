@@ -34,8 +34,7 @@ void ATankPlayerController::AimTowardsCrossHair() {
 
 	// Has "side-effect" to line trace
 	if (GetSightRayHitLocation(OUTHitLocation)) {
-		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *OUTHitLocation.ToString());
-
+		GetControlledTank()->AimAt(OUTHitLocation);
 	}
 
 
