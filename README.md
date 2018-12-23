@@ -9,3 +9,4 @@ Creating a battle tank game from Unreal Engine course from Udemy.
 * Added UI and main menu
 * Added code to both player and AI controllers
 * Started code on player and AI tank aiming components
+* Implemented code to rotate the barrel of the tank
