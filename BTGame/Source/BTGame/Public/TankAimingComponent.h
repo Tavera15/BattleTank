@@ -3,12 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/World.h"
 #include "Components/ActorComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TankAimingComponent.generated.h"
 
 // Forward Declaration
-class UTankBarrel;		
+class UTankBarrel;
+class UTankTurret;
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -24,12 +26,14 @@ public:
 	void AimAt(FVector OUTHitLocation, float LaunchSpeed);
 
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
-
+	void SetTurretReference(UTankTurret* TurretToSet);
 
 protected:
 	
 private:
 	UTankBarrel* Barrel = nullptr;
+	UTankTurret* Turret = nullptr;
 	
-	void MoveBarrelTowards(FVector);
+	void MoveBarrelTowards(FVector AimDirection);
+	//void MoveTurretTowards(FVector AimDirection);
 };
