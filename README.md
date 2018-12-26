@@ -12,3 +12,4 @@ Creating a battle tank game from Unreal Engine course from Udemy.
 * Implemented code to rotate the barrel of the tank
 * Added code and blueprint to rotate turret
 * Started the code and BP for projectiles
+* Projectiles now launch
