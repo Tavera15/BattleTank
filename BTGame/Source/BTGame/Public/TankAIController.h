@@ -22,5 +22,5 @@ public:
 	virtual void Tick(float) override;
 
 private:
-
+	float AcceptanceRadius = 3000;
 }; 

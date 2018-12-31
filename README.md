@@ -14,3 +14,4 @@ Creating a battle tank game from Unreal Engine course from Udemy.
 * Started the code and BP for projectiles
 * Projectiles now launch
 * Tank can now move
+* Improved AI and input binding
