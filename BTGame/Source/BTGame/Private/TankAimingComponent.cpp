@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "Projectile.h"
 #include "TankTurret.h"
 
 
@@ -15,18 +16,13 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
-	if (!BarrelToSet) { return; }
+void UTankAimingComponent::Initialize(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet) {
 	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet) {
-	if (!TurretToSet) { return; }
 	Turret = TurretToSet;
 }
 
-void UTankAimingComponent::AimAt(FVector OUTHitLocation, float LaunchSpeed) {
-	if (!Barrel) { return; }
+void UTankAimingComponent::AimAt(FVector OUTHitLocation) {
+	if (!ensure(Barrel)) { return; }
 	FVector OUTLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
@@ -43,19 +39,20 @@ void UTankAimingComponent::AimAt(FVector OUTHitLocation, float LaunchSpeed) {
 		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
-	
-	auto Time = GetWorld()->GetTimeSeconds();
 
 	if (bHaveAimSolution) {
 		auto AimDirection = OUTLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
 
 	}
-	
 
 }
 
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+	//if (!Barrel || !Turret) { return; }
+	if (!ensure(Barrel) || !ensure(Turret)) { return; }
+	UE_LOG(LogTemp, Warning, TEXT("Here"));
+
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimRotator - BarrelRotator;
@@ -63,11 +60,22 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	Turret->RotateTurret(DeltaRotator.Yaw);
 }
 
-/*
-void UTankAimingComponent::MoveTurretTowards(FVector AimDirection) {
-	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
-	auto AimRotator = AimDirection.Rotation();
-	auto DeltaRotator = AimRotator - BarrelRotator;
-	Turret->RotateTurret(DeltaRotator.Yaw);
+// Responsible for firing from the barrel of the tank when it's reloaded
+void UTankAimingComponent::Fire() {
+	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+	// Prevent AI and players from constantly shooting by having a reload time
+	bool isReloaded = FPlatformTime::Seconds() - LastFireTime > ReloadTimeInSeconds;
+
+	if (isReloaded) {
+		// Spawn a projectile from the socket in the barrel
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		// Make the projectile launch
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = FPlatformTime::Seconds();		// Reset timer
+	}
 }
-*/

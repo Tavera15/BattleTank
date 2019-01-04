@@ -7,7 +7,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-class ATank;
 
 
 /**
@@ -23,6 +22,11 @@ public:
 	virtual void BeginPlay() override;
 	virtual void Tick(float) override;
 
+protected:
+
+	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
+		void FoundAimingComponent(UTankAimingComponent* AimingCompRef);
+
 private:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -32,8 +36,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000.f;
 
-
-	ATank* GetControlledTank() const;
+	
 
 	// Start moving the tank's barrel where the crosshair is pointing at 
 	void AimTowardsCrossHair();
