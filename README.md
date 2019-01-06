@@ -17,3 +17,4 @@ Creating a battle tank game from Unreal Engine course from Udemy.
 * Improved AI and input binding
 * Refactor code to new architecture
 * Fixed UI Aiming
+* Added a correcting force on tank tracks to help with slipping
